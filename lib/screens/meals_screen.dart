@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meals_app_updated/screens/meal_details.dart';
+import 'package:flutter_meals_app_updated/screens/meal_details_screen.dart';
 
 import '../models/meal.dart';
 import '../widgets/meal_item.dart';
@@ -7,12 +7,11 @@ import '../widgets/meal_item.dart';
 class MealsScreen extends StatelessWidget {
   final String? title;
   final List<Meal> meals;
-  final void Function(Meal meal) onToggleFavorite;
+
   const MealsScreen({
     super.key,
     this.title,
     required this.meals,
-    required this.onToggleFavorite,
   });
 
   void selectMeal(BuildContext context, Meal meal) {
@@ -20,7 +19,6 @@ class MealsScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MealDetailsScreen(
           meal: meal,
-          onToggleFavorite: onToggleFavorite,
         ),
       ),
     );

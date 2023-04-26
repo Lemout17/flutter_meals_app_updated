@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './screens/tabs.dart';
+import 'screens/tabs_screen.dart';
 
 import './theme/theme.dart';
 
