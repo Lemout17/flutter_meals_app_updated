@@ -1,29 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_meals_app_updated/blocs/filters_bloc/filters_bloc.dart';
+import 'package:flutter_meals_app_updated/data/data.dart';
+import 'package:flutter_meals_app_updated/models/filter_data.dart';
 import 'package:flutter_meals_app_updated/screens/meal_details.dart';
 
 import '../models/meal.dart';
 import '../widgets/meal_item.dart';
 
-class MealsScreen extends StatelessWidget {
+class MealsScreen extends StatefulWidget {
   final String? title;
   final List<Meal> meals;
-  final void Function(Meal meal) onToggleFavorite;
+
   const MealsScreen({
     super.key,
     this.title,
     required this.meals,
-    required this.onToggleFavorite,
   });
 
-  void selectMeal(BuildContext context, Meal meal) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => MealDetailsScreen(
-          meal: meal,
-          onToggleFavorite: onToggleFavorite,
-        ),
-      ),
-    );
+  @override
+  State<MealsScreen> createState() => _MealsScreenState();
+}
+
+class _MealsScreenState extends State<MealsScreen> {
+  late final List<Meal> _filteredMeals;
+
+  @override
+  void initState() {
+    super.initState();
+    final List<FilterData> filterData =
+        context.read<FiltersBloc>().state.filterList;
+
+    _filteredMeals = widget.meals.where((meal) {
+      if (filterData
+              .firstWhere((element) => element.filter == Filter.glutenFree)
+              .value &&
+          !meal.isGlutenFree) {
+        return false;
+      }
+      if (filterData
+              .firstWhere((element) => element.filter == Filter.lactoseFree)
+              .value &&
+          !meal.isLactoseFree) {
+        return false;
+      }
+      if (filterData
+              .firstWhere((element) => element.filter == Filter.vegan)
+              .value &&
+          !meal.isVegan) {
+        return false;
+      }
+      if (filterData
+              .firstWhere((element) => element.filter == Filter.vegetarian)
+              .value &&
+          !meal.isVegetarian) {
+        return false;
+      }
+
+      return true;
+    }).toList();
   }
 
   @override
@@ -32,13 +67,13 @@ class MealsScreen extends StatelessWidget {
 
     Widget content = ListView.builder(
       itemBuilder: (context, index) => MealItem(
-        meal: meals[index],
+        meal: _filteredMeals[index],
         onSelectMeal: selectMeal,
       ),
-      itemCount: meals.length,
+      itemCount: _filteredMeals.length,
     );
 
-    if (meals.isEmpty) {
+    if (_filteredMeals.isEmpty) {
       content = Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -63,15 +98,25 @@ class MealsScreen extends StatelessWidget {
       );
     }
 
-    if (title == null) {
+    if (widget.title == null) {
       return content;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title!),
+        title: Text(widget.title!),
       ),
       body: content,
+    );
+  }
+
+  void selectMeal(BuildContext context, Meal meal) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MealDetailsScreen(
+          meal: meal,
+        ),
+      ),
     );
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_meals_app_updated/blocs/favorite_meals_cubit/favorite_meals_cubit.dart';
 import '../models/meal.dart';
 
 class MealDetailsScreen extends StatelessWidget {
   final Meal meal;
-  final void Function(Meal meal) onToggleFavorite;
+
   const MealDetailsScreen({
     super.key,
     required this.meal,
-    required this.onToggleFavorite,
   });
 
   @override
@@ -17,11 +18,24 @@ class MealDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
-          IconButton(
-            onPressed: () {
-              onToggleFavorite(meal);
+          BlocBuilder<FavoriteMealsCubit, FavoriteMealsState>(
+            builder: (context, state) {
+              final bool isFavorite = state.favoriteMeals.contains(meal);
+              return IconButton(
+                onPressed: () {
+                  if (isFavorite) {
+                    context.read<FavoriteMealsCubit>().removeFavoriteMeal(meal);
+                    _showInfoMessage('Meal is no longer a favorite!', context);
+                  } else {
+                    context.read<FavoriteMealsCubit>().addFavoriteMeal(meal);
+                    _showInfoMessage('Marked as a favorite!', context);
+                  }
+                },
+                icon: Icon(
+                  isFavorite ? Icons.star : Icons.star_border,
+                ),
+              );
             },
-            icon: const Icon(Icons.star),
           )
         ],
       ),
@@ -81,6 +95,15 @@ class MealDetailsScreen extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showInfoMessage(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
       ),
     );
   }

@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meals_app_updated/models/filter_data.dart';
 import '../models/category.dart';
 import '../models/meal.dart';
 
+enum Filter {
+  glutenFree,
+  lactoseFree,
+  vegetarian,
+  vegan,
+}
+
 class Constants {
+  static const List<FilterData> filtersList = [
+    FilterData(
+      title: 'Gluten - free',
+      subtitle: 'Only include gluten-free meals',
+      filter: Filter.glutenFree,
+    ),
+    FilterData(
+      title: 'Lactose - free',
+      subtitle: 'Only include lactose-free meals',
+      filter: Filter.lactoseFree,
+    ),
+    FilterData(
+      title: 'Vegan',
+      subtitle: 'Only include vegan meals',
+      filter: Filter.vegan,
+    ),
+    FilterData(
+      title: 'Vegetarian',
+      subtitle: 'Only include vegetarian meals',
+      filter: Filter.vegetarian,
+    ),
+  ];
+
   static const List<Category> availableCategories = [
     Category(
       id: 'c1',
