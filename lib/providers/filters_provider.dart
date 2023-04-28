@@ -9,27 +9,26 @@ enum Filter {
   vegan,
 }
 
-final List<FilterData> initialState = [
-  FilterData(
-    title: 'Gluten - free',
-    subtitle: 'Only include gluten-free meals',
-  ),
-  FilterData(
-    title: 'Lactose - free',
-    subtitle: 'Only include lactose-free meals',
-  ),
-  FilterData(
-    title: 'Vegan',
-    subtitle: 'Only include vegan meals',
-  ),
-  FilterData(
-    title: 'Vegetarian',
-    subtitle: 'Only include vegetarian meals',
-  ),
-];
-
 class FilterNotifier extends StateNotifier<List<FilterData>> {
-  FilterNotifier() : super(initialState);
+  FilterNotifier()
+      : super([
+          FilterData(
+            title: 'Gluten - free',
+            subtitle: 'Only include gluten-free meals',
+          ),
+          FilterData(
+            title: 'Lactose - free',
+            subtitle: 'Only include lactose-free meals',
+          ),
+          FilterData(
+            title: 'Vegan',
+            subtitle: 'Only include vegan meals',
+          ),
+          FilterData(
+            title: 'Vegetarian',
+            subtitle: 'Only include vegetarian meals',
+          ),
+        ]);
 
   // ignore: avoid_positional_boolean_parameters
   void setFilter(FilterData filter, bool isActive, int index) {
