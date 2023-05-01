@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_meals_app_updated/blocs/filtered_meals/filtered_meals_cubit.dart';
+import 'package:flutter_meals_app_updated/blocs/filters_bloc/filters_bloc.dart';
 
 import '../data/data.dart';
 import '../models/category.dart';
@@ -18,9 +21,14 @@ class CategoriesScreen extends StatelessWidget {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => MealsScreen(
-          title: category.title,
-          meals: categorisedMeals,
+        builder: (context) => BlocProvider(
+          create: (context) => FilteredMealsCubit(
+            filteredBloc: context.read<FiltersBloc>(),
+            meals: categorisedMeals,
+          ),
+          child: MealsScreen(
+            title: category.title,
+          ),
         ),
       ),
     );

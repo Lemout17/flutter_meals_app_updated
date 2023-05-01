@@ -1,21 +1,18 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_meals_app_updated/models/meal.dart';
 
-part 'favorite_meals_state.dart';
-
-class FavoriteMealsCubit extends Cubit<FavoriteMealsState> {
-  FavoriteMealsCubit() : super(const DataFavoriteMealsState([]));
+class FavoriteMealsCubit extends Cubit<List<Meal>> {
+  FavoriteMealsCubit() : super([]);
 
   void addFavoriteMeal(Meal meal) {
-    List<Meal> newList = List.from(state.favoriteMeals);
+    List<Meal> newList = List.from(state);
     newList.add(meal);
-    emit(DataFavoriteMealsState(newList));
+    emit(newList);
   }
 
   void removeFavoriteMeal(Meal meal) {
-    List<Meal> newList = List.from(state.favoriteMeals);
+    List<Meal> newList = List.from(state);
     newList.remove(meal);
-    emit(DataFavoriteMealsState(newList));
+    emit(newList);
   }
 }

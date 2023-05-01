@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_meals_app_updated/blocs/favorite_meals_cubit/favorite_meals_cubit.dart';
 
 import '../screens/categories.dart';
 import '../screens/filters.dart';
@@ -38,14 +36,10 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     List<Widget> screens = [
       const CategoriesScreen(),
-      BlocBuilder<FavoriteMealsCubit, FavoriteMealsState>(
-        builder: (context, state) {
-          return MealsScreen(
-            meals: state.favoriteMeals,
-            key: UniqueKey(),
-          );
-        },
-      )
+      MealsScreen(
+        key: UniqueKey(),
+        isFavorite: true,
+      ),
     ];
 
     return Scaffold(

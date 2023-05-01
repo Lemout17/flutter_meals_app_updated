@@ -18,9 +18,9 @@ class MealDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
-          BlocBuilder<FavoriteMealsCubit, FavoriteMealsState>(
+          BlocBuilder<FavoriteMealsCubit, List<Meal>>(
             builder: (context, state) {
-              final bool isFavorite = state.favoriteMeals.contains(meal);
+              final bool isFavorite = state.contains(meal);
               return IconButton(
                 onPressed: () {
                   if (isFavorite) {
