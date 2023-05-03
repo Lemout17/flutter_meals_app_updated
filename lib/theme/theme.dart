@@ -7,6 +7,7 @@ class AppTheme {
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
           seedColor: const Color.fromARGB(255, 131, 57, 0),
+          onSecondary: Colors.amber[800],
         ),
         textTheme: GoogleFonts.latoTextTheme(),
       );

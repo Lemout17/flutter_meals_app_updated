@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_meals_app_updated/blocs/cart_cubit/cart_cubit.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
 import '../widgets/meal_item_trait.dart';
 
 class MealItem extends StatelessWidget {
+  final bool isCartPage;
   final Meal meal;
   final void Function(BuildContext context, Meal meal) onSelectMeal;
-  const MealItem({super.key, required this.meal, required this.onSelectMeal});
+  const MealItem({
+    super.key,
+    required this.meal,
+    required this.onSelectMeal,
+    this.isCartPage = false,
+  });
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() +
@@ -38,6 +46,11 @@ class MealItem extends StatelessWidget {
               fit: BoxFit.cover,
               height: 200,
               width: double.infinity,
+            ),
+            Positioned(
+              top: 5,
+              right: 5,
+              child: isCartPage ? _buildIconButton(context) : Container(),
             ),
             Positioned(
               bottom: 0,
@@ -94,6 +107,31 @@ class MealItem extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIconButton(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Ink(
+        decoration: BoxDecoration(
+          border: Border.all(width: 2, color: Colors.white.withOpacity(0.7)),
+          color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        child: InkWell(
+          onTap: () {
+            context.read<CartCubit>().removeMealToCart(meal);
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Icon(
+              Icons.remove,
+              size: 25,
+            ),
+          ),
         ),
       ),
     );

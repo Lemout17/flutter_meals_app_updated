@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meals_app_updated/screens/cart.dart';
 
 import '../screens/categories.dart';
 import '../screens/filters.dart';
@@ -40,12 +41,13 @@ class _TabsScreenState extends State<TabsScreen> {
         key: UniqueKey(),
         isFavorite: true,
       ),
+      const CartScreen(),
     ];
 
     return Scaffold(
       drawer: MainDrawer(onSelectScreen: _setScreen),
       appBar: AppBar(
-        title: Text(_selectedPageIndex == 1 ? 'Favorites' : 'Categories'),
+        title: Text(_setTabTitle(_selectedPageIndex)),
       ),
       body: screens.elementAt(_selectedPageIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -61,8 +63,20 @@ class _TabsScreenState extends State<TabsScreen> {
             icon: Icon(Icons.star),
             label: 'Favorites',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
         ],
       ),
     );
+  }
+
+  String _setTabTitle(int pageIndex) {
+    if (pageIndex == 0) return 'Categories';
+
+    if (pageIndex == 1) return 'Favorites';
+
+    return 'Cart';
   }
 }
