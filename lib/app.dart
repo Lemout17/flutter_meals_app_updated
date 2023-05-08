@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_meals_app_updated/blocs/cart_cubit/cart_cubit.dart';
+import 'package:flutter_meals_app_updated/blocs/bloc/cart_bloc.dart';
 import 'package:flutter_meals_app_updated/blocs/favorite_meals_cubit/favorite_meals_cubit.dart';
 import 'package:flutter_meals_app_updated/blocs/filters_bloc/filters_bloc.dart';
 import './screens/tabs.dart';
@@ -20,8 +20,11 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) => FavoriteMealsCubit(),
         ),
+        // BlocProvider(
+        //   create: (_) => CartCubit(),
+        // ),
         BlocProvider(
-          create: (_) => CartCubit(),
+          create: (_) => CartBloc(),
         )
       ],
       child: MaterialApp(

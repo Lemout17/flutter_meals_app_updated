@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_meals_app_updated/blocs/cart_cubit/cart_cubit.dart';
+import 'package:flutter_meals_app_updated/blocs/bloc/cart_bloc.dart';
 import 'package:flutter_meals_app_updated/blocs/favorite_meals_cubit/favorite_meals_cubit.dart';
+import 'package:flutter_meals_app_updated/widgets/info_message.dart';
 import '../models/meal.dart';
 
 class MealDetailsScreen extends StatelessWidget {
@@ -15,7 +16,8 @@ class MealDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    bool isInCart = context.read<CartCubit>().state.contains(meal);
+    // bool isInCart = context.read<CartCubit>().state.contains(meal);
+    bool isInCart = context.read<CartBloc>().state.listOfMeals.contains(meal);
 
     return Scaffold(
       appBar: AppBar(
@@ -28,10 +30,14 @@ class MealDetailsScreen extends StatelessWidget {
                 onPressed: () {
                   if (isFavorite) {
                     context.read<FavoriteMealsCubit>().removeFavoriteMeal(meal);
-                    _showInfoMessage('Meal is no longer a favorite!', context);
+                    InfoMessage().showInfoMessage(
+                      'Meal is no longer a favorite!',
+                      context,
+                    );
                   } else {
                     context.read<FavoriteMealsCubit>().addFavoriteMeal(meal);
-                    _showInfoMessage('Marked as a favorite!', context);
+                    InfoMessage()
+                        .showInfoMessage('Marked as a favorite!', context);
                   }
                 },
                 icon: Icon(
@@ -111,27 +117,30 @@ class MealDetailsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // if (isInCart) {
+          //   context.read<CartCubit>().removeMealToCart(meal);
+          //   _showInfoMessage('Meal is removed from cart!', context);
+          // } else {
+          //   context.read<CartCubit>().addMealToCart(meal);
+          //   _showInfoMessage('Meal is added to cart!', context);
+          // }
+
           if (isInCart) {
-            context.read<CartCubit>().removeMealToCart(meal);
-            _showInfoMessage('Meal is removed from cart!', context);
+            context.read<CartBloc>().add(RemoveMealFromCart(meal));
+            InfoMessage().showInfoMessage(
+              '${meal.title} is removed from cart!',
+              context,
+            );
           } else {
-            context.read<CartCubit>().addMealToCart(meal);
-            _showInfoMessage('Meal is added to cart!', context);
+            context.read<CartBloc>().add(AddMealToCart(meal));
+            InfoMessage()
+                .showInfoMessage('${meal.title} is added to cart!', context);
           }
         },
         backgroundColor: theme.colorScheme.onSecondary,
         foregroundColor: theme.colorScheme.background,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         child: Icon(isInCart ? Icons.remove : Icons.add),
-      ),
-    );
-  }
-
-  void _showInfoMessage(String message, BuildContext context) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
       ),
     );
   }

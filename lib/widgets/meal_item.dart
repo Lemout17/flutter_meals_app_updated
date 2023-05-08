@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_meals_app_updated/blocs/cart_cubit/cart_cubit.dart';
+import 'package:flutter_meals_app_updated/blocs/bloc/cart_bloc.dart';
+import 'package:flutter_meals_app_updated/widgets/info_message.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
@@ -123,7 +124,10 @@ class MealItem extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            context.read<CartCubit>().removeMealToCart(meal);
+            // context.read<CartCubit>().removeMealToCart(meal);
+            context.read<CartBloc>().add(RemoveMealFromCart(meal));
+            InfoMessage().showInfoMessage(
+                '${meal.title} is removed from cart!', context);
           },
           child: const Padding(
             padding: EdgeInsets.all(5.0),

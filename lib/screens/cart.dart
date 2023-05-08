@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_meals_app_updated/blocs/cart_cubit/cart_cubit.dart';
+import 'package:flutter_meals_app_updated/blocs/bloc/cart_bloc.dart';
 import 'package:flutter_meals_app_updated/models/meal.dart';
 import 'package:flutter_meals_app_updated/screens/meal_details.dart';
 import 'package:flutter_meals_app_updated/widgets/meal_item.dart';
@@ -13,9 +13,15 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return BlocBuilder<CartCubit, List<Meal>>(
+    // return BlocBuilder<CartCubit, List<Meal>>(
+    //   builder: (context, state) {
+    //     return _buildBody(context, state);
+    //   },
+    // );
+
+    return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        return _buildBody(context, state);
+        return _buildBody(context, state.listOfMeals);
       },
     );
   }
